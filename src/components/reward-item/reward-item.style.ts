@@ -1,14 +1,20 @@
-import {StyleSheet} from 'react-native';
+import {
+  Colors,
+  createStyleSheet,
+  Layout,
+  Spacing,
+  Typography,
+} from '@app/theme';
 
-const styles = StyleSheet.create({
+const styles = createStyleSheet({
   listItemContainer: {
-    flexDirection: 'column',
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    marginVertical: 10,
+    flexDirection: Layout.flexDirection.column,
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    marginVertical: Spacing.md,
     borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
+    backgroundColor: Colors.white,
+    shadowColor: Colors.black,
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 5,
@@ -16,51 +22,51 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     minHeight: 150,
-    justifyContent: 'center',
+    justifyContent: Layout.justifyContent.center,
   },
   textContainer: {
-    marginBottom: 10,
+    marginBottom: Spacing.sm,
   },
   itemName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: Typography.fontSizes.lg,
+    fontWeight: Typography.fontWeights.bold as any,
+    color: Colors.text,
   },
   pointsText: {
-    fontSize: 14,
-    color: '#777',
+    fontSize: Typography.fontSizes.base,
+    color: Colors.gray,
   },
   contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: Layout.flexDirection.row,
+    justifyContent: Layout.justifyContent.between,
+    alignItems: Layout.alignItems.center,
     width: '100%',
   },
   collectButton: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 8,
-    paddingHorizontal: 20,
+    backgroundColor: Colors.success,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
     borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: Layout.justifyContent.center,
+    alignItems: Layout.alignItems.center,
   },
   collectButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: Colors.white,
+    fontSize: Typography.fontSizes.base,
+    fontWeight: Typography.fontWeights.bold as any,
   },
   imageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: Layout.flexDirection.row,
+    justifyContent: Layout.justifyContent.end,
   },
   image: {
     width: 100,
     height: 100,
     borderRadius: 8,
-    marginLeft: 8,
+    marginLeft: Spacing.sm,
     borderWidth: 1,
     borderColor: '#ddd',
-  },
+  } as const,
 });
 
 export default styles;

@@ -13,7 +13,7 @@ interface RewardState {
   error: string | null;
   totalPages: number;
   current_page: number;
-  collected_reward_ids: RewardData[];
+  collected_reward_ids: string[];
 }
 
 const initialState: RewardState = {
@@ -67,6 +67,9 @@ const rewardSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
+    collectReward: (state, action: PayloadAction<string>) => {
+      state.collected_reward_ids.push(action.payload);
+    },
     clearState: state => {
       const updatedState = {
         ...initialState,
@@ -104,7 +107,12 @@ const rewardSlice = createSlice({
   },
 });
 
-export const {loadMoreRewards, setLoading, setError, clearState} =
-  rewardSlice.actions;
+export const {
+  loadMoreRewards,
+  setLoading,
+  setError,
+  clearState,
+  collectReward,
+} = rewardSlice.actions;
 
 export default rewardSlice.reducer;

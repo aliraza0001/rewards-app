@@ -3,6 +3,7 @@ import {View, FlatList} from 'react-native';
 import {useAppDispatch, useAppSelector} from '@app/redux/hooks';
 import {
   clearState,
+  collectReward,
   fetchRewards,
   loadMoreRewards,
 } from '@app/redux/slice/rewards';
@@ -17,7 +18,9 @@ const RewardsScreen: React.FC<RewardsScreenProps> = ({navigation, route}) => {
   const dispatch = useAppDispatch();
   const loading = useAppSelector(state => state.rewards.loading);
   const loadedRewards = useAppSelector(state => state.rewards.loaded_rewards);
-  // const currentPage = useAppSelector(state => state.rewards.current_page);
+  const collected_reward_ids = useAppSelector(
+    state => state.rewards.collected_reward_ids,
+  );
 
   useEffect(() => {
     dispatch(fetchRewards(1));
@@ -32,16 +35,23 @@ const RewardsScreen: React.FC<RewardsScreenProps> = ({navigation, route}) => {
 
   const onCollectHandler = useCallback(
     (id: string) => {
-      console.log('Collect reward with id:', id);
+      dispatch(collectReward(id));
     },
-    [loadedRewards],
+    [loadedRewards, collected_reward_ids],
   );
 
   const renderItemComponent = useCallback(
-    ({item}: {item: RewardData}) => (
-      <RewardItem item={item} onCollect={onCollectHandler} />
-    ),
-    [loadedRewards],
+    ({item}: {item: RewardData}) => {
+      const isCollected = collected_reward_ids.includes(item.id);
+      return (
+        <RewardItem
+          item={item}
+          isCollected={isCollected}
+          onCollect={onCollectHandler}
+        />
+      );
+    },
+    [loadedRewards, collected_reward_ids],
   );
 
   const isLoadinStateValid = useMemo(() => {
@@ -59,6 +69,7 @@ const RewardsScreen: React.FC<RewardsScreenProps> = ({navigation, route}) => {
         onEndReached={loadMoreRewardsHandler}
         onEndReachedThreshold={0.5}
         contentContainerStyle={styles.flatListContainer}
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <EmptyListComponent
             title="No Data Found"

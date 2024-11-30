@@ -1,5 +1,5 @@
-const INITIAL_SCREEN = 'InitialScreen';
-const REWARDS_SCREEN = 'RewardsScreen';
-const COLLECTED_REWARD_SCREEN = 'CollectedRewardScreen';
+const INITIAL_SCREEN = 'Home';
+const REWARDS_SCREEN = 'Rewards';
+const COLLECTED_REWARD_SCREEN = 'CollectedRewards';
 
 export {INITIAL_SCREEN, REWARDS_SCREEN, COLLECTED_REWARD_SCREEN};

@@ -5,19 +5,23 @@ import styles from './reward-item.style';
 
 type RewardItemProps = {
   item: RewardData;
-  onCollect: (id: string) => void;
+  onCollect?: (id: string) => void | undefined;
+  isCollected?: boolean;
 };
 
-const RewardItem: React.FC<RewardItemProps> = ({item, onCollect}) => {
+const RewardItem: React.FC<RewardItemProps> = ({
+  item,
+  onCollect,
+  isCollected,
+}) => {
   return (
-    <View style={styles.listItemContainer}>
+    <View style={[styles.listItemContainer,{opacity: isCollected ? 0.7 : 1}]}>
       <View style={styles.textContainer}>
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.pointsText}>
           Points needed: {item.needed_points}
         </Text>
       </View>
-
       <View style={styles.contentContainer}>
         {Boolean(item.pictures.length) && (
           <View style={styles.imageContainer}>
@@ -30,11 +34,13 @@ const RewardItem: React.FC<RewardItemProps> = ({item, onCollect}) => {
             ))}
           </View>
         )}
-        <Pressable
-          style={styles.collectButton}
-          onPress={() => onCollect(item.id)}>
-          <Text style={styles.collectButtonText}>Collect</Text>
-        </Pressable>
+        {!isCollected && (
+          <Pressable
+            style={styles.collectButton}
+            onPress={() => onCollect?.(item.id)}>
+            <Text style={styles.collectButtonText}>Collect</Text>
+          </Pressable>
+        )}
       </View>
     </View>
   );
