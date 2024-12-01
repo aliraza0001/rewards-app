@@ -7,7 +7,8 @@ import {
 
 type RewardStackParamList = {
   [INITIAL_SCREEN]: undefined;
-  [REWARDS_SCREEN]: {rewardId?: string};
+  [REWARDS_SCREEN]: undefined;
+  // [REWARDS_SCREEN]: {rewardId?: string}; For passing params
   [COLLECTED_REWARD_SCREEN]: undefined;
 };
 

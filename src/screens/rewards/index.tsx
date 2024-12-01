@@ -1,62 +1,43 @@
-import {useCallback, useEffect, useMemo} from 'react';
+import {useCallback} from 'react';
 import {View, FlatList} from 'react-native';
-import {useAppDispatch, useAppSelector} from '@app/redux/hooks';
-import {
-  clearState,
-  collectReward,
-  fetchRewards,
-  loadMoreRewards,
-} from '@app/redux/slice/rewards';
 import {RewardsScreenProps} from '@app/types/navigation';
-import RewardItem from '@app/components/reward-item';
+import RewardCard from '@app/components/reward-card';
 import {RewardData} from '@app/types/data/rewards';
 import styles from './rewards.style';
 import EmptyListComponent from '@app/components/common/EmptyListComponent';
 import LoadingComponent from '@app/components/common/Loading';
+import useReward from './hook/useReward';
+// import {useGetRewardsQuery} from '@app/redux/actions/rewards';
 
 const RewardsScreen: React.FC<RewardsScreenProps> = ({navigation, route}) => {
-  const dispatch = useAppDispatch();
-  const loading = useAppSelector(state => state.rewards.loading);
-  const loadedRewards = useAppSelector(state => state.rewards.loaded_rewards);
-  const collected_reward_ids = useAppSelector(
-    state => state.rewards.collected_reward_ids,
-  );
+  // using redux query
+  // const {data: rewards, isLoading} = useGetRewardsQuery({page: 1});
+  const {
+    isLoadinStateValid,
+    onCollectHandler,
+    debouncedLoadMoreRewards,
+    fetchRewardsHandler,
+    collected_reward_ids,
+    loadedRewards,
+    loading,
+  } = useReward();
 
-  useEffect(() => {
-    dispatch(fetchRewards(1));
-    return () => {
-      dispatch(clearState());
-    };
-  }, []);
-
-  const loadMoreRewardsHandler = () => {
-    dispatch(loadMoreRewards());
-  };
-
-  const onCollectHandler = useCallback(
-    (id: string) => {
-      dispatch(collectReward(id));
-    },
-    [loadedRewards, collected_reward_ids],
-  );
+  // For Testing Error Boundary
+  // throw new Error('Testing Error Boundary');
 
   const renderItemComponent = useCallback(
     ({item}: {item: RewardData}) => {
       const isCollected = collected_reward_ids.includes(item.id);
       return (
-        <RewardItem
+        <RewardCard
           item={item}
           isCollected={isCollected}
           onCollect={onCollectHandler}
         />
       );
     },
-    [loadedRewards, collected_reward_ids],
+    [collected_reward_ids, onCollectHandler],
   );
-
-  const isLoadinStateValid = useMemo(() => {
-    return Boolean(loading && loadedRewards.length);
-  }, [loading, loadedRewards]);
 
   return (
     <View style={styles.container}>
@@ -64,9 +45,9 @@ const RewardsScreen: React.FC<RewardsScreenProps> = ({navigation, route}) => {
         data={loadedRewards}
         refreshing={isLoadinStateValid}
         renderItem={renderItemComponent}
-        onRefresh={() => dispatch(fetchRewards(1))}
+        onRefresh={fetchRewardsHandler}
         keyExtractor={item => item.id.toString()}
-        onEndReached={loadMoreRewardsHandler}
+        onEndReached={debouncedLoadMoreRewards}
         onEndReachedThreshold={0.5}
         contentContainerStyle={styles.flatListContainer}
         showsVerticalScrollIndicator={false}
@@ -78,6 +59,11 @@ const RewardsScreen: React.FC<RewardsScreenProps> = ({navigation, route}) => {
           />
         }
         ListFooterComponent={<LoadingComponent loading={isLoadinStateValid} />}
+        getItemLayout={(data, index) => ({
+          length: 100,
+          offset: 100 * index,
+          index,
+        })}
       />
     </View>
   );

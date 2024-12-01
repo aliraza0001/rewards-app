@@ -1,10 +1,16 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RewardData} from '@app/types/data/rewards';
 import {
   ITEM_PER_PAGE,
   TOTAL_PAGES,
   CURRENT_PAGE,
 } from '@app/constants/static-params';
+import {dummyLoadMore, fetchRewards} from '../actions/rewards';
+import {showErrorToast, showToast} from '@app/utils/toast';
+import {
+  REWARD_COLLECTED_SUCCESSFULLY,
+  SOMETHIN_WENT_WRONG,
+} from '@app/constants/messages';
 
 interface RewardState {
   all_rewards: RewardData[];
@@ -26,49 +32,21 @@ const initialState: RewardState = {
   collected_reward_ids: [],
 };
 
-// Async thunk to fetch rewards data
-export const fetchRewards = createAsyncThunk(
-  'reward/fetchRewards',
-  async (page: number, {rejectWithValue}) => {
-    try {
-      const response = await fetch(
-        `https://staging.helloagain.at/api/v1/clients/5189/bounties`,
-      );
-      if (!response.ok) {
-        throw new Error('Failed to fetch rewards');
-      }
-      const data: RewardData[] = await response.json();
-      return {rewards: data || []};
-    } catch (error: any) {
-      return rejectWithValue(error.message);
-    }
-  },
-);
-
 const rewardSlice = createSlice({
   name: 'reward',
   initialState,
   reducers: {
-    loadMoreRewards: state => {
-      if (state.current_page >= state.totalPages) return;
-
-      state.loading = true;
-      const nextRewards = state.all_rewards.slice(
-        state.loaded_rewards.length,
-        state.loaded_rewards.length + ITEM_PER_PAGE,
-      );
-      state.current_page += 1;
-      state.loaded_rewards = [...state.loaded_rewards, ...nextRewards];
-      state.loading = false;
-    },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
+      showErrorToast(action.payload?.toString() || SOMETHIN_WENT_WRONG);
     },
     collectReward: (state, action: PayloadAction<string>) => {
+      if (state.collected_reward_ids.includes(action.payload)) return;
       state.collected_reward_ids.push(action.payload);
+      showToast(REWARD_COLLECTED_SUCCESSFULLY);
     },
     clearState: state => {
       const updatedState = {
@@ -103,16 +81,27 @@ const rewardSlice = createSlice({
       .addCase(fetchRewards.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(dummyLoadMore.pending, state => {
+        state.loading = true;
+      })
+      .addCase(dummyLoadMore.fulfilled, state => {
+        if (state.current_page >= state.totalPages) return;
+        const nextRewards = state.all_rewards.slice(
+          state.loaded_rewards.length,
+          state.loaded_rewards.length + ITEM_PER_PAGE,
+        );
+        state.current_page += 1;
+        state.loaded_rewards = [...state.loaded_rewards, ...nextRewards];
+        state.loading = false;
+      })
+      .addCase(dummyLoadMore.rejected, state => {
+        state.loading = false;
       });
   },
 });
 
-export const {
-  loadMoreRewards,
-  setLoading,
-  setError,
-  clearState,
-  collectReward,
-} = rewardSlice.actions;
+export const {setLoading, setError, clearState, collectReward} =
+  rewardSlice.actions;
 
 export default rewardSlice.reducer;
