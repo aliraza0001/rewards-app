@@ -67,6 +67,13 @@ const styles = createStyleSheet({
     borderWidth: 1,
     borderColor: '#ddd',
   } as const,
+  selectedReward: {
+    backgroundColor: "#eeeeee",
+    borderColor: Colors.gray,
+    borderWidth: 1,
+    borderRadius: 8,
+    opacity: 0.5,
+  },
 });
 
 export default styles;

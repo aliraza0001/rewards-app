@@ -14,7 +14,10 @@ const RewardCard: React.FC<RewardCardProps> = memo(
   ({item, onCollect, isCollected}) => {
     return (
       <View
-        style={[styles.listItemContainer, {opacity: isCollected ? 0.7 : 1}]}>
+        style={[
+          styles.listItemContainer,
+          isCollected && styles.selectedReward,
+        ]}>
         <View style={styles.textContainer}>
           <Text style={styles.itemName}>{item.name}</Text>
           <Text style={styles.pointsText}>

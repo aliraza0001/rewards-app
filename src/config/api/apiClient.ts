@@ -1,4 +1,6 @@
 import {create, ApisauceInstance} from 'apisauce';
+// Need to change this using env variable later
+const baseURL = 'https://staging.helloagain.at/api/v1/';
 
 // For React Query API Config
 // import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
@@ -12,19 +14,9 @@ import {create, ApisauceInstance} from 'apisauce';
 
 // API SAUCE AXIOS WRAPPER
 const API: ApisauceInstance = create({
-  baseURL: 'https://staging.helloagain.at/api/v1/',
+  baseURL: baseURL,
   headers: {Accept: 'application/json'},
-  timeout: 10000,
+  timeout: 5000,
 });
 
-async function apiRequest<T>(
-  request: Promise<ApiResponse<T>>,
-): Promise<ApiResponse<T>> {
-  const response = await request;
-  if (!response.ok) {
-    console.error('API Error:', response.problem);
-  }
-  return response;
-}
-
-export {API, apiRequest};
+export {API};

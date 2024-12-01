@@ -7,6 +7,7 @@ import styles from './rewards.style';
 import EmptyListComponent from '@app/components/common/EmptyListComponent';
 import LoadingComponent from '@app/components/common/Loading';
 import useReward from './hook/useReward';
+import SafeAreaViewWrapper from '@app/components/common/SafeAreaViewWrapper';
 // import {useGetRewardsQuery} from '@app/redux/actions/rewards';
 
 const RewardsScreen: React.FC<RewardsScreenProps> = ({navigation, route}) => {
@@ -40,32 +41,36 @@ const RewardsScreen: React.FC<RewardsScreenProps> = ({navigation, route}) => {
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={loadedRewards}
-        refreshing={isLoadinStateValid}
-        renderItem={renderItemComponent}
-        onRefresh={fetchRewardsHandler}
-        keyExtractor={item => item.id.toString()}
-        onEndReached={debouncedLoadMoreRewards}
-        onEndReachedThreshold={0.5}
-        contentContainerStyle={styles.flatListContainer}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <EmptyListComponent
-            title="No Data Found"
-            loading={loading}
-            length={loadedRewards.length}
-          />
-        }
-        ListFooterComponent={<LoadingComponent loading={isLoadinStateValid} />}
-        getItemLayout={(data, index) => ({
-          length: 100,
-          offset: 100 * index,
-          index,
-        })}
-      />
-    </View>
+    <SafeAreaViewWrapper>
+      <View style={styles.container}>
+        <FlatList
+          data={loadedRewards}
+          refreshing={isLoadinStateValid}
+          renderItem={renderItemComponent}
+          onRefresh={fetchRewardsHandler}
+          keyExtractor={item => item.id.toString()}
+          onEndReached={debouncedLoadMoreRewards}
+          onEndReachedThreshold={0.5}
+          contentContainerStyle={styles.flatListContainer}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <EmptyListComponent
+              title="No Data Found"
+              loading={loading}
+              length={loadedRewards.length}
+            />
+          }
+          ListFooterComponent={
+            <LoadingComponent loading={isLoadinStateValid} />
+          }
+          getItemLayout={(data, index) => ({
+            length: 100,
+            offset: 100 * index,
+            index,
+          })}
+        />
+      </View>
+    </SafeAreaViewWrapper>
   );
 };
 

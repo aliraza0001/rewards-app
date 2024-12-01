@@ -6,6 +6,7 @@ import {RewardData} from '@app/types/data/rewards';
 import styles from './collected-rewards.style';
 import EmptyListComponent from '@app/components/common/EmptyListComponent';
 import {CollectedRewardsScreenProps} from '@app/types/navigation';
+import SafeAreaViewWrapper from '@app/components/common/SafeAreaViewWrapper';
 
 const CollectedRewardsScreen: React.FC<CollectedRewardsScreenProps> = ({
   navigation,
@@ -28,22 +29,24 @@ const CollectedRewardsScreen: React.FC<CollectedRewardsScreenProps> = ({
   }, [loadedRewards]);
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={filteredRewards}
-        renderItem={renderItemComponent}
-        keyExtractor={item => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.flatListContainer}
-        ListEmptyComponent={
-          <EmptyListComponent
-            title="No Data Found"
-            loading={false}
-            length={loadedRewards.length}
-          />
-        }
-      />
-    </View>
+    <SafeAreaViewWrapper>
+      <View style={styles.container}>
+        <FlatList
+          data={filteredRewards}
+          renderItem={renderItemComponent}
+          keyExtractor={item => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.flatListContainer}
+          ListEmptyComponent={
+            <EmptyListComponent
+              title="No Data Found"
+              loading={false}
+              length={loadedRewards.length}
+            />
+          }
+        />
+      </View>
+    </SafeAreaViewWrapper>
   );
 };
 

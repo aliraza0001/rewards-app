@@ -3,6 +3,7 @@ import {InitialScreenProps} from '@app/types/navigation';
 import {COLLECTED_REWARD_SCREEN, REWARDS_SCREEN} from '@app/constants/routes';
 import CustomButton from '@app/components/common/Button';
 import {Colors, Layout, Spacing} from '@app/theme';
+import SafeAreaViewWrapper from '@app/components/common/SafeAreaViewWrapper';
 
 const InitialScreen: React.FC<InitialScreenProps> = ({navigation}) => {
   const navigateToRewardsScreen = () => {
@@ -14,20 +15,22 @@ const InitialScreen: React.FC<InitialScreenProps> = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <CustomButton
-          buttonStyle={styles.buttonStyle}
-          onPress={navigateToRewardsScreen}
-          title="Rewards List"
-        />
-        <CustomButton
-          buttonStyle={styles.buttonStyle}
-          onPress={navigateToCollectedRewardScreen}
-          title="Collected Rewards"
-        />
+    <SafeAreaViewWrapper>
+      <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            buttonStyle={styles.buttonStyle}
+            onPress={navigateToRewardsScreen}
+            title="Rewards List"
+          />
+          <CustomButton
+            buttonStyle={styles.buttonStyle}
+            onPress={navigateToCollectedRewardScreen}
+            title="Collected Rewards"
+          />
+        </View>
       </View>
-    </View>
+    </SafeAreaViewWrapper>
   );
 };
 
