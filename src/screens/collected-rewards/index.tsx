@@ -36,7 +36,6 @@ const CollectedRewardsScreen: React.FC<CollectedRewardsScreenProps> = ({
           renderItem={renderItemComponent}
           keyExtractor={item => item.id.toString()}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.flatListContainer}
           ListEmptyComponent={
             <EmptyListComponent
               title="No Data Found"

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import LoadingComponent from '../Loading';
 
 interface EmptyListComponentProps {
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    height: Dimensions.get('window').height,
   },
   emptyListText: {
     fontSize: 18,

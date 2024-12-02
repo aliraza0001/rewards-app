@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {Text, View, Image} from 'react-native';
+import {Text, View, Image, LayoutChangeEvent} from 'react-native';
 import {RewardData} from '@app/types/data/rewards';
 import styles from './reward-card.style';
 import CustomButton from '../common/Button';
@@ -8,39 +8,43 @@ type RewardCardProps = {
   item: RewardData;
   onCollect?: (id: string) => void | undefined;
   isCollected?: boolean;
+  onLayout?: (event: LayoutChangeEvent) => void;
 };
 
 const RewardCard: React.FC<RewardCardProps> = memo(
-  ({item, onCollect, isCollected}) => {
+  ({item, onCollect, isCollected, onLayout}) => {
+    const renderImages = () => {
+      return item.pictures
+        .slice(0, 4) //render only first 4 images
+        .map((img_src, index) => (
+          <Image
+            key={img_src.order}
+            source={{uri: img_src.image}}
+            style={styles.image}
+            resizeMode="cover"
+          />
+        ));
+    };
+
     return (
       <View
-        style={[
-          styles.listItemContainer,
-          isCollected && styles.selectedReward,
-        ]}>
-        <View style={styles.textContainer}>
-          <Text style={styles.itemName}>{item.name}</Text>
-          <Text style={styles.pointsText}>
-            Points needed: {item.needed_points}
-          </Text>
-        </View>
+        onLayout={onLayout}
+        style={[styles.card, isCollected && styles.collectedCard]}>
+        <View style={styles.imageContainer}>{renderImages()}</View>
         <View style={styles.contentContainer}>
-          {Boolean(item.pictures.length) && (
-            <View style={styles.imageContainer}>
-              {item.pictures.slice(0, 2).map(img_src => (
-                <Image
-                  key={img_src.order}
-                  source={{uri: img_src.image}}
-                  style={styles.image}
-                />
-              ))}
-            </View>
-          )}
+          <Text style={styles.name} numberOfLines={2}>
+            {item.name}
+          </Text>
+          <Text style={styles.description} numberOfLines={3}>
+            {item.description}
+          </Text>
+          <Text style={styles.points}>
+            {item.needed_points} points need to collect
+          </Text>
           {!isCollected && (
             <CustomButton
-              buttonStyle={styles.collectButton}
-              onPress={() => onCollect?.(item.id)}
               title="Collect"
+              onPress={() => onCollect?.(item.id)}
             />
           )}
         </View>

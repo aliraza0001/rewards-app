@@ -1,11 +1,10 @@
-import { Colors } from '@app/theme';
+import {Colors} from '@app/theme';
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    alignItems: 'center',
   },
   flatListContainer: {
     flexGrow: 1,
@@ -65,19 +64,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
   },
-  collectButton: {
-    backgroundColor: '#4CAF50', // Green button color
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    alignItems: 'center',
+
+  centerContent: {
+    minHeight: '100%',
     justifyContent: 'center',
-    marginTop: 10,
-  },
-  collectButtonText: {
-    color: '#fff', // White text color
-    fontSize: 16,
-    fontWeight: 'bold',
+    alignItems: 'center',
   },
 });
 

@@ -30,7 +30,7 @@ const useReward = () => {
 
   const isLoadinStateValid = useMemo(() => {
     return Boolean(loading && loadedRewards.length);
-  }, [loading, loadedRewards]);
+  }, [loading, loadedRewards.length]);
 
   const fetchRewardsHandler = () => {
     dispatch(fetchRewards(1));
