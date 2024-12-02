@@ -41,7 +41,7 @@ const CollectedRewardsScreen: React.FC<CollectedRewardsScreenProps> = ({
             <EmptyListComponent
               title="No Data Found"
               loading={false}
-              length={loadedRewards.length}
+              length={filteredRewards.length}
             />
           }
         />
