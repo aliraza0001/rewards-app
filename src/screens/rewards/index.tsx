@@ -11,6 +11,8 @@ import SafeAreaViewWrapper from '@app/components/common/SafeAreaViewWrapper';
 import RewardCard from '@app/components/reward-card';
 
 const RewardsScreen: React.FC<RewardsScreenProps> = () => {
+  // using redux query
+  // const {data: rewards, isLoading} = useGetRewardsQuery({page: 1});
   const {
     isLoadinStateValid,
     onCollectHandler,
@@ -20,6 +22,9 @@ const RewardsScreen: React.FC<RewardsScreenProps> = () => {
     loadedRewards,
     loading,
   } = useReward();
+
+  // For Testing Error Boundary
+  // throw new Error('Testing Error Boundary');
 
   const renderItem: ListRenderItem<RewardData> = useCallback(
     ({item}) => {
